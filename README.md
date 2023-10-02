@@ -4,9 +4,9 @@ This is the iteration assignment in BAN400. As you know -- given that you have c
 
 **Date:**
 
-**Name:**
+**Name: Henrik Markmanrud**
 
-**Student number:**
+**Student number: s203742**
 
 ## :information_source: Problem 1
 Update the personal information above.
