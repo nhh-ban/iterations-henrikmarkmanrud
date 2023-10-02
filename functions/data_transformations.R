@@ -1,4 +1,3 @@
-
 # Function to transform dataset
 transform_metadata_to_df <- function(stations_metadata) {
   
@@ -20,4 +19,23 @@ transform_metadata_to_df <- function(stations_metadata) {
   return(df)
   
 }
+
+# Function to return the date time variable in ISO8601 format, with the offset 
+# added.
+to_iso8601 <- function(datetime_str, offset) {
+  
+  # Convert the string to a datetime object
+  datetime_var <- anytime(datetime_str)
+  
+  # Add the offset
+  adjusted_datetime <- datetime_var + days(offset)
+  
+  # Convert to UTC timezone and format it in ISO8601 format with "Z" at the end
+  formatted <- format(adjusted_datetime, 
+                      format ="%Y-%m-%dT%H:%M:%SZ", 
+                      tz = "UTC")
+  
+  return(formatted)
+}
+
 
