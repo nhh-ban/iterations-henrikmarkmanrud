@@ -5,6 +5,11 @@
 # All tests are packed in a function test_stations_metadata that apples
 # all the aforementioned tests
 
+
+# Brief comment: 
+# The function compares the names of the columns in the data frame, to 
+# expected column names defined in this function. If the column names 
+# are identical the function print PASS, if not the function prints FAIL
 test_stations_metadata_colnames <-
   function(df) {
     
@@ -17,6 +22,11 @@ test_stations_metadata_colnames <-
     }
   }
 
+# Brief comment:
+# The function check if the total number of rows in the created data frame
+# is in between the interval 5000 to 10000 rows. If so the function prints
+# PASS, and if the number of rows is outside this intervall, the function prints
+# FAIL.
 test_stations_metadata_nrows <-
   function(df) {
     
@@ -32,6 +42,11 @@ test_stations_metadata_nrows <-
     }
   }
 
+# Brief comment:
+# The function compares the type of the columns in the data frame to a
+# specified column type defined in the function. If the column types is as
+# expected, the function prints PASS, and if not the function prints FAIL.
+
 test_stations_metadata_coltypes <-
   function(df) {
     expected_coltypes <-
@@ -45,6 +60,9 @@ test_stations_metadata_coltypes <-
     }
   }
   
+# Brief comment:
+# This function check the number of missing value in the computed data frame. 
+# If the number of missing values is under 200, the function prints pass
 test_stations_metadata_nmissing <-
   function(df) {
     max_miss_vals <- 200
@@ -56,6 +74,8 @@ test_stations_metadata_nmissing <-
     }
   }
 
+# Brief comment:
+# The function checks if the date column has an expected UTC-time zone or not
 test_stations_metadata_latestdata_timezone <-
   function(df) {
     
@@ -66,7 +86,8 @@ test_stations_metadata_latestdata_timezone <-
     }
   }
 
-
+# When running the function test_stations_metadata, all the functions above 
+# are ran.
 test_stations_metadata <- 
   function(df){
     test_stations_metadata_colnames(df)
