@@ -38,4 +38,22 @@ to_iso8601 <- function(datetime_str, offset) {
   return(formatted)
 }
 
+# Function that transforms the json-return from the API to a data frame 
+# that can be used for plotting
+
+transform_volumes <- function(data_json) {
+  data_json$trafficData$volume$byHour$edges %>%
+    tibble::tibble(data = .) %>%
+    tidyr::unnest_wider(data) %>%
+    tidyr::unnest_wider(node) %>%
+    tidyr::unnest_wider(total) %>%
+    tidyr::unnest_wider(volumeNumbers) %>%
+    dplyr::mutate(
+      from = lubridate::ymd_hms(from, quiet = TRUE),
+      to = lubridate::ymd_hms(to, quiet = TRUE),
+      volume = as.numeric(volume)
+    )
+}
+  
+
 
