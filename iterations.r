@@ -50,20 +50,29 @@ test_stations_metadata(stations_metadata_df)
 
 source("gql-queries/vol_qry.r")
 
-stations_metadata_df %>% 
+selected_station <- stations_metadata_df %>% 
   filter(latestData > Sys.Date() - days(7)) %>% 
-  sample_n(1) %$% 
-  vol_qry(
-    id = id,
-    from = to_iso8601(latestData, -4),
-    to = to_iso8601(latestData, 0)
-  ) %>% 
-  GQL(., .url = configs$vegvesen_url) %>%
-  transform_volumes() %>% 
-  ggplot(aes(x=from, y=volume)) + 
-  geom_line() + 
-  theme_classic()
+  sample_n(1)
 
+name <- selected_station$name
+
+vol_data <- vol_qry(
+  id = selected_station$id,
+  from = to_iso8601(selected_station$latestData, -4),
+  to = to_iso8601(selected_station$latestData, 0)
+)
+
+# Use vol_data in the next pipe chain to make the plot
+vol_data %>% 
+  GQL(.url = configs$vegvesen_url) %>%
+  transform_volumes() %>% 
+  mutate(name = name) %>% 
+  ggplot(aes(x = from, y = volume, color = name)) + 
+  geom_line() + 
+  scale_color_manual(values = "blue", name = "") +
+  theme_classic() + 
+  xlab("Date") + 
+  ylab("Volume")
 
 
 
