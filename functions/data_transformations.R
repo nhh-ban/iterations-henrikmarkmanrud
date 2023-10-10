@@ -2,21 +2,16 @@
 transform_metadata_to_df <- function(stations_metadata) {
   
   # First extracting relevant data
-  df <- tibble(data = stations_metadata$trafficRegistrationPoints) %>% 
-    
-    transmute(
-      id = map_chr(data, ~ .x$id),
-      name = map_chr(data, ~ .x$name),
-      latestData = map(data, ~ .x$latestData$volumeByHour), 
-      lat = map_dbl(data, ~ .x$location$coordinates$latLon$lat),
-      lon = map_dbl(data, ~ .x$location$coordinates$latLon$lon)
-      ) %>% 
-    
-    mutate(
-      latestData = ymd_hms(latestData, tz="UTC")
-    )
+  df <- 
+    stations_metadata[[1]] %>% 
+    map(as_tibble) %>% # Mapping the data as tibble
+    list_rbind() %>% 
+    mutate(latestData = map_chr(latestData, 1, .default = NA_character_)) %>% 
+    mutate(latestData = as_datetime(latestData, tz = "UTC")) %>% 
+    unnest_wider(location) %>% # using the unnest - function
+    unnest_wider(latLon)
   
-  return(df)
+  return(df) # returning the data frame in the function 
   
 }
 

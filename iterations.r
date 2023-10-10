@@ -52,9 +52,10 @@ source("gql-queries/vol_qry.r")
 
 selected_station <- stations_metadata_df %>% 
   filter(latestData > Sys.Date() - days(7)) %>% 
-  sample_n(1)
+  sample_n(1) # Sampling one station from the data frame
 
-name <- selected_station$name
+name <- selected_station$name # Defining the station to a variable to be able 
+# to add legend in the ggplot
 
 vol_data <- vol_qry(
   id = selected_station$id,
@@ -62,16 +63,16 @@ vol_data <- vol_qry(
   to = to_iso8601(selected_station$latestData, 0)
 )
 
-# Use vol_data in the next pipe chain to make the plot
+# Use vol_data defined earlier to make the ggplot
 vol_data %>% 
   GQL(.url = configs$vegvesen_url) %>%
-  transform_volumes() %>% 
-  mutate(name = name) %>% 
+  transform_volumes() %>% # Using the transform from data_transformations
+  mutate(name = name) %>% # Adding the name for the station
   ggplot(aes(x = from, y = volume, color = name)) + 
-  geom_line() + 
-  scale_color_manual(values = "blue", name = "") +
+  geom_line() + # Adding a line to the plot
+  scale_color_manual(values = "blue", name = "") + # Manually adding the legend
   theme_classic() + 
-  xlab("Date") + 
+  xlab("Date") + # Making the axis labels cleaner
   ylab("Volume")
 
 
